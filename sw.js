@@ -51,4 +51,54 @@ self.addEventListener('fetch', function(e) {
       });
     })
   );
+});/* Fetch: cache-first strategy (app works fully offline) */
+self.addEventListener('fetch', function(e) {
+
+  // Ignore unsupported schemes
+  if (
+    e.request.url.startsWith('chrome-extension://') ||
+    e.request.url.startsWith('moz-extension://') ||
+    e.request.url.startsWith('file://')
+  ) {
+    return;
+  }
+
+  e.respondWith(
+    caches.match(e.request).then(function(cached) {
+
+      if (cached) {
+        return cached;
+      }
+
+      return fetch(e.request).then(function(response) {
+
+        // Only cache successful HTTP/HTTPS requests
+        if (
+          !response ||
+          response.status !== 200 ||
+          (e.request.url.indexOf('http://') !== 0 &&
+           e.request.url.indexOf('https://') !== 0)
+        ) {
+          return response;
+        }
+
+        var clone = response.clone();
+
+        caches.open(CACHE).then(function(cache) {
+          cache.put(e.request, clone);
+        });
+
+        return response;
+
+      }).catch(function() {
+
+        // For page navigation when offline
+        if (e.request.mode === 'navigate') {
+          return caches.match('/index.html');
+        }
+
+      });
+
+    })
+  );
 });
