@@ -774,8 +774,8 @@ const BRACKETS=[
 
 function fmt(n){return'RM '+parseFloat(n).toLocaleString('en-MY',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function roundUp5Cents(amount){ if(amount<=0) return 0; return Math.ceil((amount - 1e-9) * 20) / 20; } // LHDN: round PCB up to nearest 5 cents
-function getSocso(w,ee){if(w<=30)return 0;w=Math.min(w,6000);for(var r of SOCSO){if(w<=r[0])return ee?r[2]:r[1];}return ee?29.75:104.25}
-function getEis(w){if(w<=30)return 0;w=Math.min(w,6000);for(var r of EIS){if(w<=r[0])return r[1];}return 11.90}
+function getSocso(w,ee){if(w<=30)return 0;w=Math.min(w,6000);for(var r of SOCSO){if(w<=r[30])return ee?r[2]:r[1];}return ee?29.75:104.25}
+function getEis(w){if(w<=30)return 0;w=Math.min(w,6000);for(var r of EIS){if(w<=r[30])return r[1];}return 11.90}
 function progressiveTax(c){
   for(var b of BRACKETS){if(c<=b.max)return b.base+Math.max(0,c-b.min)*b.rate;}
   return 528400+(c-2000000)*.30;
