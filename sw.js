@@ -1,8 +1,10 @@
-/* MY Payroll Lab — Service Worker v1 */
-const CACHE = 'mypayrolllab-v1';
+/* MY Payroll Lab — Service Worker v3 */
+const CACHE = 'mypayrolllab-v3';
 const ASSETS = [
   '/',
   '/index.html',
+  '/style.css',
+  '/script.js',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png'
@@ -49,56 +51,6 @@ self.addEventListener('fetch', function(e) {
         /* Offline fallback */
         return caches.match('/index.html');
       });
-    })
-  );
-});/* Fetch: cache-first strategy (app works fully offline) */
-self.addEventListener('fetch', function(e) {
-
-  // Ignore unsupported schemes
-  if (
-    e.request.url.startsWith('chrome-extension://') ||
-    e.request.url.startsWith('moz-extension://') ||
-    e.request.url.startsWith('file://')
-  ) {
-    return;
-  }
-
-  e.respondWith(
-    caches.match(e.request).then(function(cached) {
-
-      if (cached) {
-        return cached;
-      }
-
-      return fetch(e.request).then(function(response) {
-
-        // Only cache successful HTTP/HTTPS requests
-        if (
-          !response ||
-          response.status !== 200 ||
-          (e.request.url.indexOf('http://') !== 0 &&
-           e.request.url.indexOf('https://') !== 0)
-        ) {
-          return response;
-        }
-
-        var clone = response.clone();
-
-        caches.open(CACHE).then(function(cache) {
-          cache.put(e.request, clone);
-        });
-
-        return response;
-
-      }).catch(function() {
-
-        // For page navigation when offline
-        if (e.request.mode === 'navigate') {
-          return caches.match('/index.html');
-        }
-
-      });
-
     })
   );
 });
