@@ -3,11 +3,11 @@ const CACHE = 'mypayrolllab-v3';
 const ASSETS = [
   '/',
   '/index.html',
-  '/style.css',
+  '/assets/css/style.css',
   '/script.js',
   '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/assets/icons/icon-192.png',
+  '/assets/icons/icon-512.png'
 ];
 
 /* Install: cache all app files */
