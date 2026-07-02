@@ -1,5 +1,5 @@
 /* MY Payroll Lab — Service Worker v4 */
-const CACHE = 'mypayrolllab-v3';
+const CACHE = 'mypayrolllab-v4';
 const ASSETS = [
   '/',
   '/index.html',
