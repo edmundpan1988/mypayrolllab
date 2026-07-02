@@ -1,0 +1,22 @@
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: same-origin
+
+/index.html
+  Cache-Control: no-cache, must-revalidate
+
+/script.js
+  Cache-Control: no-cache, must-revalidate
+
+/style.css
+  Cache-Control: no-cache, must-revalidate
+
+/sw.js
+  Cache-Control: no-cache, must-revalidate
+
+/*.png
+  Cache-Control: public, max-age=604800
+
+/manifest.json
+  Cache-Control: no-cache, must-revalidate
