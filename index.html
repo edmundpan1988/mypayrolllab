@@ -3,16 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Primary SEO -->
+<title>MY Payroll Lab — Free Malaysia Payroll & PCB Calculator | EPF SOCSO EIS MTD</title>
+<meta name="description" content="Free Malaysia statutory payroll calculator. Instantly calculate EPF, SOCSO, EIS and PCB/MTD using the official LHDN formula. Covers all tax categories, bonus PCB, OKU relief, child relief, Lindung 24 Jam 2026 and more. Works offline.">
+<meta name="keywords" content="Malaysia payroll calculator, PCB calculator, MTD calculator, EPF calculator, SOCSO calculator, EIS calculator, LHDN PCB formula, Malaysia statutory deductions, payroll Malaysia 2026, Skim Lindung 24 Jam">
+<meta name="robots" content="index, follow">
+<meta name="author" content="MY Payroll Lab">
+<link rel="canonical" href="https://mypayrolllab.com">
+
+<!-- Open Graph (Facebook, LinkedIn, WhatsApp preview) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mypayrolllab.com">
+<meta property="og:title" content="MY Payroll Lab — Free Malaysia Payroll Calculator">
+<meta property="og:description" content="Calculate EPF, SOCSO, EIS and PCB/MTD instantly using the official LHDN formula. Covers bonus PCB, OKU, child relief, Lindung 24 Jam 2026. Free, offline-ready.">
+<meta property="og:image" content="https://mypayrolllab.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="MY Payroll Lab">
+<meta property="og:locale" content="en_MY">
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://mypayrolllab.com">
+<meta name="twitter:title" content="MY Payroll Lab — Free Malaysia Payroll Calculator">
+<meta name="twitter:description" content="Calculate EPF, SOCSO, EIS and PCB/MTD instantly. LHDN official formula. Free, no login, works offline.">
+<meta name="twitter:image" content="https://mypayrolllab.com/og-image.png">
+
+<!-- PWA / Mobile -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="MY Payroll Lab">
 <meta name="theme-color" content="#1D9E75">
-<meta name="description" content="Malaysia statutory payroll calculator — EPF, SOCSO, EIS, PCB/MTD">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
-<title>MY Payroll Lab — Malaysia Statutory Calculator</title>
-<link rel="stylesheet" href="/assets/css/style.css?v=4">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<!-- JSON-LD Structured Data (Google rich results) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "MY Payroll Lab",
+  "url": "https://mypayrolllab.com",
+  "description": "Free Malaysia statutory payroll calculator covering EPF, SOCSO, EIS and PCB/MTD using the official LHDN Schedule 1 formula.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "MYR"
+  },
+  "featureList": [
+    "EPF contribution calculator",
+    "SOCSO contribution calculator",
+    "EIS contribution calculator",
+    "PCB/MTD calculator using LHDN official formula",
+    "Bonus PCB two-step calculation",
+    "OKU tax relief",
+    "Child relief calculator",
+    "Skim Lindung 24 Jam 2026",
+    "Works offline as PWA"
+  ],
+  "inLanguage": "en-MY",
+  "isAccessibleForFree": true,
+  "creator": {
+    "@type": "Organization",
+    "name": "MY Payroll Lab",
+    "url": "https://mypayrolllab.com"
+  }
+}
+</script>
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 <div class="container">
@@ -124,7 +186,7 @@
     <!-- Income -->
     <div class="card">
       <div class="card-title">Income This Month</div>
-      <div class="field"><label>Basic salary (RM)</label><input type="number" id="salary" value="0" min="0" oninput="calc()"></div>
+      <div class="field"><label>Basic salary (RM)</label><input type="number" id="salary" value="5000" min="0" oninput="calc()"></div>
       <div class="row-2">
         <div class="field"><label>Fixed allowances (RM)</label><input type="number" id="allow" value="0" min="0" oninput="calc()"></div>
         <div class="field"><label>Overtime (RM)</label><input type="number" id="ot" value="0" min="0" oninput="calc()"></div>
@@ -525,7 +587,7 @@
   <footer>MY Payroll Lab &mdash; Malaysia Statutory Checker &middot; mypayrolllab.com</footer>
 </div>
 
-<script src="/script.js?v=4"></script>
+<script src="script.js?v=3"></script>
 <script>
 /* Register SW only on real deployed domain, not in preview environments */
 if('serviceWorker' in navigator &&
