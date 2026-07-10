@@ -37,7 +37,7 @@
 <meta name="apple-mobile-web-app-title" content="MY Payroll Lab">
 <meta name="theme-color" content="#1D9E75">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 
 <!-- JSON-LD Structured Data (Google rich results) -->
 <script type="application/ld+json">
@@ -74,7 +74,7 @@
   }
 }
 </script>
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
 <div class="container">
@@ -186,7 +186,7 @@
     <!-- Income -->
     <div class="card">
       <div class="card-title">Income This Month</div>
-      <div class="field"><label>Basic salary (RM)</label><input type="number" id="salary" value="5000" min="0" oninput="calc()"></div>
+      <div class="field"><label>Basic salary (RM)</label><input type="number" id="salary" value="0" min="0" oninput="calc()"></div>
       <div class="row-2">
         <div class="field"><label>Fixed allowances (RM)</label><input type="number" id="allow" value="0" min="0" oninput="calc()"></div>
         <div class="field"><label>Overtime (RM)</label><input type="number" id="ot" value="0" min="0" oninput="calc()"></div>
@@ -550,6 +550,39 @@
     </div>
   </div>
 
+  <!-- Email Capture -->
+  <div class="email-capture">
+    <div class="ec-badge">Free Updates</div>
+    <div class="ec-title">Stay ahead of every statutory change</div>
+    <div class="ec-subtitle">
+      EPF rates, SOCSO ceilings, PCB formula updates — get notified the moment
+      anything changes. Used by HR managers, payroll executives and SME owners across Malaysia.
+    </div>
+    <div class="ec-perks">
+      <span class="ec-perk">Monthly statutory update digest</span>
+      <span class="ec-perk">Early access to new calculator features</span>
+      <span class="ec-perk">Free HRMS compliance tips</span>
+    </div>
+    <form class="ec-form"
+          action="YOUR_GOOGLE_FORM_ACTION_URL"
+          method="POST"
+          target="_blank"
+          onsubmit="handleEmailSubmit(event)">
+      <input type="text"
+             name="entry.YOUR_NAME_ENTRY_ID"
+             placeholder="Your name"
+             required
+             autocomplete="name">
+      <input type="email"
+             name="entry.YOUR_EMAIL_ENTRY_ID"
+             placeholder="Work email address"
+             required
+             autocomplete="email">
+      <button type="submit" class="ec-submit">Get Free Updates</button>
+    </form>
+    <div class="ec-note">No spam. Unsubscribe anytime. Your email stays private.</div>
+  </div>
+
   <!-- Disclaimer -->
   <div class="disclaimer-block">
     <div class="disc-header">
@@ -587,7 +620,7 @@
   <footer>MY Payroll Lab &mdash; Malaysia Statutory Checker &middot; mypayrolllab.com</footer>
 </div>
 
-<script src="script.js?v=3"></script>
+<script src="script.js?v=5"></script>
 <script>
 /* Register SW only on real deployed domain, not in preview environments */
 if('serviceWorker' in navigator &&
