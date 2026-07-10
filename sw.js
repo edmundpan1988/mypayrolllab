@@ -1,5 +1,5 @@
-/* MY Payroll Lab — Service Worker v5 */
-const CACHE = 'mypayrolllab-v5';
+/* MY Payroll Lab — Service Worker v6 */
+const CACHE = 'mypayrolllab-v6';
 
 /* Core app files — match your actual GitHub folder structure */
 const APP_ASSETS = [
