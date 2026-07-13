@@ -249,6 +249,12 @@ function buildExplanation(){
   }
 }
 
+/* ── Lindung 24 Jam opt-in tracking ─────────────────────────── */
+(function(){
+  var cb = document.getElementById('lindung_optin');
+  if(cb){ cb.addEventListener('change', function(){ cb._userTouched = true; }); }
+})();
+
 /* ── Child relief calculator ─────────────────────────────────── */
 var claimRate = '100';
 function setClaimRate(rate){
@@ -366,10 +372,18 @@ function calc(){
   var eis_ee=0,eis_er=0;
   if(nat==='local'){eis_ee=getEis(salary);eis_er=getEis(salary);}
 
-  /* ── Lindung 24 Jam ─────────────────────────────────────────── */
+  /* ── Lindung 24 Jam (SKBBK) ─────────────────────────────────── */
+  // From 9 Jul 2026: voluntary for local employees, mandatory for foreign workers
   var lindung=0;
-  var lindungOn=(year>2026)||(year===2026&&month>=6);
-  if(lindungOn&&nat==='local'){
+  var lindungActive=(year>2026)||(year===2026&&month>=6);
+  var lindungMandatory = lindungActive && nat==='foreign'; // always mandatory for foreign
+  var lindungOptIn = lindungActive && nat==='local' &&
+    (year===2026&&month<7 // Jun 2026: was mandatory, treat as auto opt-in
+      ? true
+      : (document.getElementById('lindung_optin') &&
+         document.getElementById('lindung_optin').checked));
+  var lindungOn = lindungMandatory || lindungOptIn;
+  if(lindungOn){
     lindung=Math.round(Math.min(salary,6000)*getLindungRate(year)*100)/100;
   }
 
@@ -572,10 +586,26 @@ function calc(){
   document.getElementById('o_net').textContent      = fmt(netPay);
   document.getElementById('o_total_deduct').textContent = '- '+fmt(totalDeduct);
 
-  /* Lindung */
-  document.getElementById('o_lindung').textContent  = '- '+fmt(lindung);
-  document.getElementById('lindung_row').style.display  = lindungOn ? 'flex' : 'none';
-  document.getElementById('lindung_notice').style.display = lindungOn ? 'block' : 'none';
+  /* Lindung 24 Jam row + labels */
+  document.getElementById('o_lindung').textContent = '- '+fmt(lindung);
+  // Show row from Jun 2026 for foreign (always) or for local (always show so they can opt in)
+  var lindungRowVisible = (year>2026)||(year===2026&&month>=6);
+  document.getElementById('lindung_row').style.display = lindungRowVisible ? 'flex' : 'none';
+  // Toggle local vs foreign sub-labels
+  var localLabel   = document.getElementById('lindung_label_local');
+  var foreignLabel = document.getElementById('lindung_label_foreign');
+  if(localLabel)   localLabel.style.display   = (nat==='local' && lindungRowVisible) ? 'inline' : 'none';
+  if(foreignLabel) foreignLabel.style.display = (nat==='foreign' && lindungRowVisible) ? 'inline' : 'none';
+  // Checkbox state: auto-check if June 2026 (original mandatory month), uncheck from July for local
+  var optinCb = document.getElementById('lindung_optin');
+  if(optinCb && nat==='local' && year===2026 && month===6 && !optinCb._userTouched){
+    optinCb.checked = true; // June 2026 was mandatory — pre-tick as reference
+  }
+  document.getElementById('lindung_notice').style.display = lindungRowVisible ? 'block' : 'none';
+  var noticeLocal   = document.getElementById('lindung_notice_local');
+  var noticeForeign = document.getElementById('lindung_notice_foreign');
+  if(noticeLocal)   noticeLocal.style.display   = (nat==='local'   && lindungRowVisible) ? 'inline' : 'none';
+  if(noticeForeign) noticeForeign.style.display = (nat==='foreign' && lindungRowVisible) ? 'inline' : 'none';
 
   /* CP38 */
   document.getElementById('o_cp38').textContent = '- '+fmt(cp38);
@@ -650,9 +680,25 @@ function calc(){
     taxCat, rPersonal, spouseRelief, okuRelief, rChild,
     otherRelief: Math.min(rLife,3000)+Math.min(rMedical,10000)+Math.min(rSspn,8000)+Math.min(rLifestyle,2500)+Math.min(rEduIns,3000)+Math.min(rPrs,3000),
     zakat, cp38,
-    lindungOn, lindung, totalPCB
+    lindungOn, lindungActive, lindungMandatory, lindungOptIn, lindung, totalPCB
   };
   /* Refresh explanation if open */
   if(document.getElementById('explain_content').style.display === 'block'){ buildExplanation(); }
 }
 calc();
+
+/* ── Email Capture Form ──────────────────────────────────────── */
+function handleEmailSubmit(e){
+  var btn = e.target.querySelector('.ec-submit');
+  if(btn){
+    btn.textContent = '✓ Subscribed!';
+    btn.style.background = '#E1F5EE';
+    btn.style.color = '#0F6E56';
+    setTimeout(function(){
+      btn.textContent = 'Get Free Updates';
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 4000);
+  }
+  /* Form submits to Google Form in new tab — do not preventDefault */
+}
