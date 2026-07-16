@@ -9,14 +9,26 @@
 /script.js
   Cache-Control: no-cache, must-revalidate
 
-/assets/css/style.css
+/style.css
   Cache-Control: no-cache, must-revalidate
 
 /sw.js
   Cache-Control: no-cache, must-revalidate
 
-/assets/icons/*.png
+/*.png
   Cache-Control: public, max-age=604800
 
 /manifest.json
   Cache-Control: no-cache, must-revalidate
+
+/favicon.ico
+  Cache-Control: public, max-age=604800
+
+/favicon-16x16.png
+  Cache-Control: public, max-age=604800
+
+/favicon-32x32.png
+  Cache-Control: public, max-age=604800
+
+/apple-touch-icon.png
+  Cache-Control: public, max-age=604800

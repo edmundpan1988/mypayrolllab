@@ -9,7 +9,11 @@ const APP_ASSETS = [
   '/manifest.json',
   '/assets/css/style.css',
   '/assets/icons/icon-192.png',
-  '/assets/icons/icon-512.png'
+  '/assets/icons/icon-512.png',
+  '/favicon.ico',
+  '/favicon-32x32.png',
+  '/favicon-16x16.png',
+  '/apple-touch-icon.png'
 ];
 
 /* Files that must always be fresh — never serve from cache */
