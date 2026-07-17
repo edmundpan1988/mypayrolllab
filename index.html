@@ -342,9 +342,8 @@
       <div class="result-row" id="lindung_row" style="display:none">
         <span class="lbl">
           <span id="lindung_label_local" style="display:none">
-            <label style="cursor:pointer;display:flex;align-items:center;gap:6px">
-              <input type="checkbox" id="lindung_optin" onchange="calc()"
-                style="-webkit-appearance:none;appearance:none;width:16px;height:16px;flex-shrink:0;border:2px solid var(--checkbox-border);border-radius:4px;background:var(--checkbox-bg);position:relative;cursor:pointer;transition:all .15s"
+            <label style="cursor:pointer;display:flex;align-items:center;gap:8px">
+              <input type="checkbox" id="lindung_optin" class="custom-cb" onchange="calc()"
                 title="Tick to opt in to Lindung 24 Jam (voluntary for locals from Jul 2026)">
               Lindung 24 Jam (0.75%)
             </label>
@@ -588,17 +587,17 @@
       <span class="ec-perk">Free HRMS compliance tips</span>
     </div>
     <form class="ec-form"
-          action="https://docs.google.com/forms/d/e/1FAIpQLSdQQ8N1-AkzIl_x5Px24j0kXDVIr2l5Za8m5s8MqdcjSDAljg/viewform?usp=pp_url&entry.1235514058=Edmund&entry.64636675=edmundpan@hotmail.com"
+          action="YOUR_GOOGLE_FORM_ACTION_URL"
           method="POST"
           target="_blank"
           onsubmit="handleEmailSubmit(event)">
       <input type="text"
-             name="entry.1235514058"
+             name="entry.YOUR_NAME_ENTRY_ID"
              placeholder="Your name"
              required
              autocomplete="name">
       <input type="email"
-             name="entry.64636675"
+             name="entry.YOUR_EMAIL_ENTRY_ID"
              placeholder="Work email address"
              required
              autocomplete="email">
