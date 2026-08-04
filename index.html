@@ -78,7 +78,7 @@
   }
 }
 </script>
-<link rel="stylesheet" href="assets/css/style.css?v=8">
+<link rel="stylesheet" href="assets/css/style.css?v=9">
 </head>
 <body>
 <div class="container">
@@ -196,19 +196,14 @@
         <small class="field-hint">&#9679; EPF &bull; SOCSO &bull; EIS &bull; PCB &bull; SKBBK</small>
       </div>
       <div class="field">
-        <label>EPF-liable allowances (RM)</label>
+        <label>Allowances (RM)</label>
         <input type="number" id="allow" value="0" min="0" oninput="calc()">
-        <small class="field-hint">&#9679; EPF &bull; SOCSO &bull; EIS &bull; PCB &bull; SKBBK &mdash; e.g. housing, car, shift allowance</small>
-      </div>
-      <div class="field">
-        <label>EPF-exempt / Ad-hoc allowances (RM)</label>
-        <input type="number" id="allow_exempt" value="0" min="0" oninput="calc()">
-        <small class="field-hint">&#9675; PCB only &mdash; e.g. meal claims, transport, internet, one-time allowance</small>
+        <small class="field-hint">&#9675; PCB only &mdash; EPF liable/exempt depends on allowance type. Verify with employer.</small>
       </div>
       <div class="field">
         <label>Overtime (RM)</label>
         <input type="number" id="ot" value="0" min="0" oninput="calc()">
-        <small class="field-hint">&#9675; PCB only &mdash; not subject to EPF, SOCSO, EIS, SKBBK</small>
+        <small class="field-hint">&#9675; SOCSO &bull; EIS &bull; SKBBK &bull; PCB &mdash; not subject to EPF</small>
       </div>
       <div class="field">
         <label>Bonus / commission (RM)</label>
@@ -224,9 +219,13 @@
 
     <!-- Voluntary EPF -->
     <div class="card full-width">
-      <div class="card-title">EPF Voluntary Contributions
-        <span class="badge" style="background:var(--warn-light);color:var(--warn)">Optional — above mandatory</span>
+      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;width:100%" onclick="toggleVolEPF()">
+        <span>EPF Voluntary Contributions
+          <span class="badge" style="background:var(--warn-light);color:var(--warn)">Optional — above mandatory</span>
+        </span>
+        <button id="vol_toggle_btn" style="background:none;border:1px solid var(--border2);border-radius:6px;padding:3px 10px;font-size:12px;cursor:pointer;color:var(--text2)">Show ▼</button>
       </div>
+      <div id="vol_epf_content" style="display:none">
       <div class="vol-grid">
 
         <!-- Employee Voluntary -->
@@ -271,7 +270,8 @@
           </div>
         </div>
 
-      </div>
+      </div><!-- end vol-grid -->
+      </div><!-- end vol_epf_content -->
     </div>
 
     <!-- Tax Reliefs -->
@@ -298,10 +298,14 @@
         </div>
         <!-- Child Relief Calculator -->
         <div class="child-section">
-          <div class="child-section-title">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 20a7 7 0 0 1 13 0"/></svg>
-            Children Tax Relief
+          <div class="child-section-title" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="toggleChildRelief()">
+            <span style="display:flex;align-items:center;gap:6px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 20a7 7 0 0 1 13 0"/></svg>
+              Children Tax Relief
+            </span>
+            <button id="child_toggle_btn" style="background:none;border:1px solid var(--border2);border-radius:6px;padding:3px 10px;font-size:12px;cursor:pointer;color:var(--text2)">Show ▼</button>
           </div>
+          <div id="child_relief_content" style="display:none">
           <div class="child-claim-toggle">
             <button class="claim-btn active" id="claim_100" onclick="setClaimRate('100')">
               100% — I am the sole claimant
@@ -341,6 +345,7 @@
             <span class="ct-label">Total child relief applied</span>
             <span class="ct-val" id="child_total_display">RM 0.00</span>
           </div>
+          </div><!-- end child_relief_content -->
         </div>
 
         <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
@@ -355,7 +360,7 @@
     <div class="card">
       <div class="card-title">Employee Deductions</div>
       <div class="result-row"><span class="lbl">Gross pay this month</span><span class="val" id="o_gross">RM 0.00</span></div>
-      <div class="result-row"><span class="lbl">EPF / SOCSO / EIS wage</span><span class="val" id="o_epf_wage">RM 0.00</span></div>
+      <div class="result-row"><span class="lbl">EPF wage (salary only)</span><span class="val" id="o_epf_wage">RM 0.00</span></div>
 
       <div class="section-label">Statutory deductions</div>
       <div class="result-row"><span class="lbl">EPF mandatory (<span id="epf_ee_rate">11%</span>)</span><span class="val deduct" id="o_epf_ee">- RM 0.00</span></div>
@@ -666,7 +671,7 @@
   <footer>MY Payroll Lab &mdash; Malaysia Statutory Checker &middot; mypayrolllab.com</footer>
 </div>
 
-<script src="script.js?v=8"></script>
+<script src="script.js?v=9"></script>
 <script>
 /* Register SW only on real deployed domain, not in preview environments */
 if('serviceWorker' in navigator &&

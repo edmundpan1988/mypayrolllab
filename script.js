@@ -129,15 +129,14 @@ function buildExplanation(){
   /* Step 1 — Gross pay */
   steps.push({n:stepN++, text:'<strong>Gross pay this month:</strong> ' + fmt(d.gross) +
     ' (Basic ' + fmt(d.salary) +
-    (d.allow>0       ? ' + EPF-liable allowances '+fmt(d.allow) : '') +
-    (d.allowExempt>0 ? ' + EPF-exempt allowances '+fmt(d.allowExempt) : '') +
+    (d.allow>0 ? ' + Allowances '+fmt(d.allow) : '') +
     (d.ot>0          ? ' + OT '+fmt(d.ot) : '') +
     (d.bonus>0       ? ' + Bonus/Commission '+fmt(d.bonus) : '') +
     (d.bik>0         ? ' + BIK/VOLA '+fmt(d.bik) : '') + ')'});
 
   /* Step 2 — EPF */
-  var epfText = '<strong>EPF / SOCSO / EIS wage:</strong> ' + fmt(d.epfWage) +
-    ' (salary + EPF-liable allowances only — OT, exempt allowances, BIK excluded). EPF deducted: ' + fmt(d.epf_ee) + ' mandatory' +
+  var epfText = '<strong>EPF wage:</strong> ' + fmt(d.epfWage) +
+    ' (salary only — OT, allowances & BIK excluded per EPF Act). SOCSO/EIS/SKBBK wage: '+fmt(d.socsoWage)+' (salary + OT). EPF deducted: ' + fmt(d.epf_ee) + ' mandatory' +
     (d.epf_vol_ee>0 ? ' + '+fmt(d.epf_vol_ee)+' voluntary' : '');
   if(d.bonus>0 && d.epf_bonus_ee>0){
     epfText += ' + '+fmt(d.epf_bonus_ee)+' on bonus (Kt)';
@@ -256,6 +255,24 @@ function buildExplanation(){
   if(cb){ cb.addEventListener('change', function(){ cb._userTouched = true; }); }
 })();
 
+/* ── Collapsible sections ───────────────────────────────────────── */
+function toggleChildRelief(){
+  var content = document.getElementById('child_relief_content');
+  var btn     = document.getElementById('child_toggle_btn');
+  if(!content || !btn) return;
+  var open = content.style.display === 'block';
+  content.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Show ▼' : 'Hide ▲';
+}
+function toggleVolEPF(){
+  var content = document.getElementById('vol_epf_content');
+  var btn     = document.getElementById('vol_toggle_btn');
+  if(!content || !btn) return;
+  var open = content.style.display === 'block';
+  content.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Show ▼' : 'Hide ▲';
+}
+
 /* ── Child relief calculator ─────────────────────────────────── */
 var claimRate = '100';
 function setClaimRate(rate){
@@ -309,9 +326,8 @@ setVolType('ee','none'); setVolType('er','none');
 function calc(){
   /* ── inputs ─────────────────────────────────────────────────── */
   var salary  =parseFloat(document.getElementById('salary').value)||0;
-  var allow       =parseFloat(document.getElementById('allow').value)||0;       // EPF-liable allowances
-  var allowExempt =parseFloat(document.getElementById('allow_exempt').value)||0; // EPF-exempt / ad-hoc
-  var ot          =parseFloat(document.getElementById('ot').value)||0;            // PCB only
+  var allow =parseFloat(document.getElementById('allow').value)||0; // Allowances (PCB only)
+  var ot    =parseFloat(document.getElementById('ot').value)||0;    // SOCSO+EIS+SKBBK+PCB (not EPF)
   var bonus   =parseFloat(document.getElementById('bonus').value)||0;
   var bik     =parseFloat(document.getElementById('bik').value)||0;
   var age     =document.getElementById('age').value;
@@ -339,10 +355,11 @@ function calc(){
 
   /* ── gross & EPF-liable wages ───────────────────────────────── */
   /* Gross = all income for net pay */
-  var gross   = salary + allow + allowExempt + ot + bonus + bik;
-  /* EPF / SOCSO / EIS / SKBBK wage = salary + EPF-liable allowances only
-     Excluded: OT, EPF-exempt allowances, bonus, BIK (per EPF Act Third Schedule) */
-  var epfWage = salary + allow;
+  var gross    = salary + allow + ot + bonus + bik;
+  /* EPF wage = salary only (OT, allowances, bonus, BIK all excluded per EPF Act Third Schedule) */
+  var epfWage  = salary;
+  /* SOCSO / EIS / SKBBK wage = salary + OT (allowances excluded, OT is subject to SOCSO/EIS) */
+  var socsoWage = salary + ot;
 
   /* ── EPF mandatory ──────────────────────────────────────────── */
   var epf_ee=0,epf_er=0,epfEeRate='11%',epfErRate='13%';
@@ -370,13 +387,13 @@ function calc(){
 
   /* ── SOCSO ──────────────────────────────────────────────────── */
   var socso_ee=0,socso_er=0;
-  /* SOCSO/EIS wage = salary + EPF-liable allowances (same basis as EPF) */
-  if(nat==='local'){socso_ee=getSocso(epfWage,true);socso_er=getSocso(epfWage,false);}
-  else{socso_er=getSocso(epfWage,false);}
+  /* SOCSO/EIS wage = salary + OT (OT is subject to SOCSO/EIS) */
+  if(nat==='local'){socso_ee=getSocso(socsoWage,true);socso_er=getSocso(socsoWage,false);}
+  else{socso_er=getSocso(socsoWage,false);}
 
   /* ── EIS ────────────────────────────────────────────────────── */
   var eis_ee=0,eis_er=0;
-  if(nat==='local'){eis_ee=getEis(epfWage);eis_er=getEis(epfWage);}
+  if(nat==='local'){eis_ee=getEis(socsoWage);eis_er=getEis(socsoWage);}
 
   /* ── Lindung 24 Jam (SKBBK) ─────────────────────────────────── */
   // From 9 Jul 2026: voluntary for local employees, mandatory for foreign workers
@@ -390,8 +407,8 @@ function calc(){
          document.getElementById('lindung_optin').checked));
   var lindungOn = lindungMandatory || lindungOptIn;
   if(lindungOn){
-    /* SKBBK uses same wage base as SOCSO = salary + EPF-liable allowances */
-    lindung=Math.round(Math.min(epfWage,6000)*getLindungRate(year)*100)/100;
+    /* SKBBK uses same wage base as SOCSO = salary + OT */
+    lindung=Math.round(Math.min(socsoWage,6000)*getLindungRate(year)*100)/100;
   }
 
   /* ── Marital status → spouse relief ────────────────────────── */
@@ -446,10 +463,8 @@ function calc(){
   var totalRelief = D + S + Du + Su + QC + LP;
 
   /* ── Regular salary P (excludes bonus) — for MTD(A) ─────────── */
-  /* PCB P formula: all taxable income except BIK (BIK handled via annualGross elsewhere)
-     Includes: salary + EPF-liable + EPF-exempt + OT (all are taxable)
-     Excludes: BIK handled separately, bonus handled via Kt two-step */
-  var regularGross = salary + allow + allowExempt + ot;
+  /* PCB P formula: salary + allowances + OT (all taxable, BIK and bonus handled separately) */
+  var regularGross = salary + allow + ot;
   var accNet    = accGross - accEpfCapped;       // Σ(Y-K) from previous months
   var currNet   = regularGross - K1;             // Y1 - K1  (regular, no bonus)
   var futureNet = (regularGross - K2) * n;       // (Y2-K2) × n
@@ -680,7 +695,7 @@ function calc(){
 
   /* ── Store snapshot for explanation engine ───────────────────── */
   lastCalc = {
-    gross, salary, allow, allowExempt, ot, bonus, bik, epfWage,
+    gross, salary, allow, ot, bonus, bik, epfWage, socsoWage,
     epf_ee, epf_vol_ee, epf_bonus_ee, epf_total_ee,
     K1, K2, K2b, Kt, n, nPlus1,
     accGross, accPcb, accEpf,
