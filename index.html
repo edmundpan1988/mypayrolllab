@@ -78,7 +78,7 @@
   }
 }
 </script>
-<link rel="stylesheet" href="assets/css/style.css?v=9">
+<link rel="stylesheet" href="assets/assets/css/style.css?v=10">
 </head>
 <body>
 <div class="container">
@@ -198,7 +198,7 @@
       <div class="field">
         <label>Allowances (RM)</label>
         <input type="number" id="allow" value="0" min="0" oninput="calc()">
-        <small class="field-hint">&#9675; PCB only &mdash; EPF liable/exempt depends on allowance type. Verify with employer.</small>
+        <small class="field-hint">&#9679; EPF &bull; SOCSO &bull; EIS &bull; SKBBK &bull; PCB &mdash; exclude EPF-exempt allowances outside this system</small>
       </div>
       <div class="field">
         <label>Overtime (RM)</label>
@@ -360,7 +360,7 @@
     <div class="card">
       <div class="card-title">Employee Deductions</div>
       <div class="result-row"><span class="lbl">Gross pay this month</span><span class="val" id="o_gross">RM 0.00</span></div>
-      <div class="result-row"><span class="lbl">EPF wage (salary only)</span><span class="val" id="o_epf_wage">RM 0.00</span></div>
+      <div class="result-row"><span class="lbl">EPF / SOCSO / EIS wage</span><span class="val" id="o_epf_wage">RM 0.00</span></div>
 
       <div class="section-label">Statutory deductions</div>
       <div class="result-row"><span class="lbl">EPF mandatory (<span id="epf_ee_rate">11%</span>)</span><span class="val deduct" id="o_epf_ee">- RM 0.00</span></div>
@@ -615,17 +615,17 @@
       <span class="ec-perk">Free HRMS compliance tips</span>
     </div>
     <form class="ec-form"
-          action="https://docs.google.com/forms/d/e/1FAIpQLSfIOaE51Mu_8rbmAyrH4ytct6DgTLTL3j8aQOXuEgFoX8BB-g/viewform?pli=1"
+          action="YOUR_GOOGLE_FORM_ACTION_URL"
           method="POST"
           target="_blank"
           onsubmit="handleEmailSubmit(event)">
       <input type="text"
-             name="entry.1949628940"
+             name="entry.YOUR_NAME_ENTRY_ID"
              placeholder="Your name"
              required
              autocomplete="name">
       <input type="email"
-             name="entry.1914218091"
+             name="entry.YOUR_EMAIL_ENTRY_ID"
              placeholder="Work email address"
              required
              autocomplete="email">
@@ -671,7 +671,7 @@
   <footer>MY Payroll Lab &mdash; Malaysia Statutory Checker &middot; mypayrolllab.com</footer>
 </div>
 
-<script src="script.js?v=9"></script>
+<script src="script.js?v=10"></script>
 <script>
 /* Register SW only on real deployed domain, not in preview environments */
 if('serviceWorker' in navigator &&

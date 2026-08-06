@@ -136,7 +136,7 @@ function buildExplanation(){
 
   /* Step 2 — EPF */
   var epfText = '<strong>EPF wage:</strong> ' + fmt(d.epfWage) +
-    ' (salary only — OT, allowances & BIK excluded per EPF Act). SOCSO/EIS/SKBBK wage: '+fmt(d.socsoWage)+' (salary + OT). EPF deducted: ' + fmt(d.epf_ee) + ' mandatory' +
+    ' (salary + allowances — OT, bonus & BIK excluded per EPF Act). SOCSO/EIS/SKBBK wage: '+fmt(d.socsoWage)+' (salary + allowances + OT). EPF deducted: ' + fmt(d.epf_ee) + ' mandatory' +
     (d.epf_vol_ee>0 ? ' + '+fmt(d.epf_vol_ee)+' voluntary' : '');
   if(d.bonus>0 && d.epf_bonus_ee>0){
     epfText += ' + '+fmt(d.epf_bonus_ee)+' on bonus (Kt)';
@@ -355,11 +355,11 @@ function calc(){
 
   /* ── gross & EPF-liable wages ───────────────────────────────── */
   /* Gross = all income for net pay */
-  var gross    = salary + allow + ot + bonus + bik;
-  /* EPF wage = salary only (OT, allowances, bonus, BIK all excluded per EPF Act Third Schedule) */
-  var epfWage  = salary;
-  /* SOCSO / EIS / SKBBK wage = salary + OT (allowances excluded, OT is subject to SOCSO/EIS) */
-  var socsoWage = salary + ot;
+  var gross     = salary + allow + ot + bonus + bik;
+  /* EPF wage = salary + allowances (OT, bonus, BIK excluded per EPF Act Third Schedule) */
+  var epfWage   = salary + allow;
+  /* SOCSO / EIS / SKBBK wage = salary + allowances + OT */
+  var socsoWage = salary + allow + ot;
 
   /* ── EPF mandatory ──────────────────────────────────────────── */
   var epf_ee=0,epf_er=0,epfEeRate='11%',epfErRate='13%';
